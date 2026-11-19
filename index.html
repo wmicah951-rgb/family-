@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Family Feud Night · Host &amp; Operator</title>
+<meta name="theme-color" content="#14142b">
+<style>
+  :root { --ink:#1b1b2f; --muted:#6b6b80; --line:#e3e3ec; --bg:#f5f5fa; --card:#fff; --accent:#14142b; }
+  * { box-sizing: border-box; }
+  html { scroll-padding-top: 150px; }
+  body { margin:0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+         color:var(--ink); background:var(--bg); -webkit-font-smoothing: antialiased; }
+  a { color: inherit; }
+  button { font: inherit; cursor: pointer; }
+  .wrap { max-width: 920px; margin: 0 auto; padding: 0 16px 80px; }
+
+  /* top bar */
+  .top { position: sticky; top: 0; z-index: 20; background: var(--gc, var(--accent)); color: #fff; box-shadow: 0 2px 10px rgba(0,0,0,.15); }
+  .top-in { max-width: 920px; margin: 0 auto; padding: 12px 16px 10px; display:flex; align-items:center; gap:12px; }
+  .back { background: rgba(255,255,255,.18); border: 0; color:#fff; border-radius: 10px; padding: 8px 12px; font-weight: 700; text-decoration:none; white-space:nowrap; }
+  .top h1 { margin:0; font-size: 18px; line-height:1.15; }
+  .top small { display:block; opacity:.85; font-size: 12px; font-weight: 500; }
+  .chips { max-width: 920px; margin: 0 auto; padding: 0 16px 10px; display:flex; gap:6px; overflow-x:auto; scrollbar-width:none; }
+  .chips::-webkit-scrollbar { display:none; }
+  .chip { flex: 0 0 auto; background: rgba(255,255,255,.18); color:#fff; border:0; border-radius: 999px; padding: 7px 13px; font-weight: 700; font-size: 13px; text-decoration:none; }
+  .chip.on { background:#fff; color: var(--gc); }
+
+  /* home */
+  .hero { background: var(--accent); color:#fff; padding: 34px 16px 28px; text-align:center; }
+  .hero h1 { margin: 0 0 6px; font-size: 30px; letter-spacing: .5px; }
+  .hero p { margin: 0; opacity: .8; }
+  .grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin-top: 18px; }
+  .gcard { display:block; text-decoration:none; color:#fff; border-radius: 16px; padding: 18px; min-height: 140px; position:relative; box-shadow: 0 4px 14px rgba(0,0,0,.12); transition: transform .12s; }
+  .gcard:active { transform: scale(.98); }
+  .gcard .num { font-size: 13px; font-weight: 800; letter-spacing: 1.5px; opacity:.85; }
+  .gcard .ttl { font-size: 21px; font-weight: 800; margin: 6px 0 8px; line-height: 1.15; }
+  .gcard .meta { font-size: 13px; opacity: .9; }
+  .gcard .go { position:absolute; right: 16px; bottom: 14px; font-weight: 800; font-size: 14px; }
+  .howlink { display:flex; align-items:center; justify-content:space-between; margin-top: 14px; background: var(--card); border:1px solid var(--line); border-radius: 14px; padding: 16px; text-decoration:none; font-weight: 700; }
+
+  /* mode toggle */
+  .mode { display:flex; background:#e8e8f0; border-radius: 12px; padding: 4px; margin: 16px 0 6px; }
+  .mode button { flex:1; border:0; background:transparent; padding: 10px; border-radius: 9px; font-weight: 800; color: var(--muted); }
+  .mode button.on { background:#fff; color: var(--ink); box-shadow: 0 1px 4px rgba(0,0,0,.1); }
+  .hint { color: var(--muted); font-size: 13px; margin: 4px 2px 0; }
+
+  /* round card */
+  .round { background: var(--card); border-radius: 16px; margin-top: 18px; overflow:hidden; border: 1px solid var(--line); }
+  .rhead { display:flex; align-items:center; gap: 8px; padding: 12px 14px; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+  .rnum { background: var(--gc); color:#fff; font-weight: 800; border-radius: 8px; padding: 4px 9px; font-size: 13px; }
+  .rtitle { font-weight: 800; font-size: 17px; flex: 1 1 auto; }
+  .badge { font-size: 11px; font-weight: 800; padding: 4px 8px; border-radius: 6px; color:#fff; letter-spacing:.3px; }
+  .b-slide { background:#2b2b3d; } .b-1 { background:#607d8b; } .b-2 { background:#1565c0; } .b-3 { background:#b71c1c; }
+  .rbody { padding: 14px; }
+  .label { font-size: 11px; font-weight: 800; letter-spacing: 1px; color: var(--gc); margin-bottom: 6px; }
+  .q { background: #f6f6fb; border-left: 5px solid var(--gc); border-radius: 10px; padding: 14px; font-size: 20px; font-weight: 700; line-height: 1.35; }
+  .q .lead { color: var(--muted); font-weight: 600; }
+  .board { display:grid; grid-template-columns: 1fr 1fr; grid-auto-flow: column; grid-template-rows: repeat(4, auto); gap: 8px; margin-top: 16px; }
+  .tile { display:flex; align-items:center; gap: 10px; background:#fff; border: 2px solid #2b2b3d; border-radius: 12px; padding: 10px; min-height: 64px; text-align:left; width:100%; color: var(--ink); }
+  .tile .n { flex: 0 0 34px; height:34px; border-radius:50%; background: var(--gc); color:#fff; display:grid; place-items:center; font-weight:900; font-size: 17px; }
+  .tile .a { flex: 1 1 auto; font-weight: 750; font-size: 15px; line-height: 1.2; }
+  .tile .a small { display:block; font-weight: 500; font-style: italic; color: var(--muted); font-size: 12px; margin-top: 2px; }
+  .tile .p { flex: 0 0 auto; background:#2b2b3d; color:#fff; border-radius: 8px; min-width: 38px; padding: 6px 4px; text-align:center; font-weight: 900; font-size: 17px; }
+  .tile.done { opacity: .38; border-style: dashed; }
+  .tile.done .n { background: #2e7d32; }
+  .tile.blank { border: 2px dashed var(--line); background: #fafafc; color: #b5b5c3; justify-content:center; font-size: 13px; font-weight: 600; min-height: 64px; }
+  .tools { display:flex; align-items:center; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+  .strikes { display:flex; gap: 6px; }
+  .x { width: 40px; height: 40px; border-radius: 10px; border: 2px solid #c62828; background:#fff; color:#c62828; font-weight: 900; font-size: 20px; }
+  .x.on { background:#c62828; color:#fff; }
+  .reset { margin-left:auto; border: 1px solid var(--line); background:#fff; border-radius: 10px; padding: 9px 12px; font-weight: 700; color: var(--muted); }
+  .bank { font-size: 13px; color: var(--muted); font-weight: 600; }
+  .bank b { color: var(--ink); }
+  .note { margin-top: 12px; background: #fff8e1; border: 1px solid #ffe08a; border-radius: 10px; padding: 10px 12px; font-size: 14px; line-height: 1.45; }
+  .opsteps { margin-top: 12px; font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+  /* host-only rundown */
+  .rd { background: var(--card); border:1px solid var(--line); border-radius: 14px; padding: 14px; margin-top: 12px; }
+  .rd h3 { margin: 0 0 6px; font-size: 15px; color: var(--gc); }
+  .rd .rq { font-weight: 700; font-size: 16px; line-height: 1.35; margin-bottom: 8px; }
+  .rd ol { margin: 0; padding-left: 22px; columns: 2; column-gap: 20px; font-size: 14px; }
+  .rd li { margin: 2px 0; break-inside: avoid; }
+  .rd li span { color: var(--muted); font-weight: 700; }
+
+  /* fast money */
+  .fm li { font-size: 18px; font-weight: 700; margin: 10px 0; line-height: 1.3; }
+
+  /* how-to */
+  .how { background: var(--card); border:1px solid var(--line); border-radius: 16px; padding: 6px 16px; margin-top: 16px; }
+  .how .row { display:grid; grid-template-columns: 150px 1fr; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .how .row:last-child { border-bottom: 0; }
+  .how b { display:block; } .how small { color: var(--muted); }
+  .warn { margin-top: 14px; background: #ffebee; color:#b71c1c; border-radius: 12px; padding: 12px 14px; font-weight: 700; }
+  .steps { background: var(--card); border:1px solid var(--line); border-radius: 16px; padding: 14px 16px 14px 36px; margin-top: 14px; line-height: 1.6; }
+
+  @media (max-width: 560px) {
+    .q { font-size: 18px; }
+    .board { grid-template-columns: 1fr; grid-auto-flow: row; grid-template-rows: none; }
+    .tile.blank { display:none; }
+    .rd ol { columns: 1; }
+    .how .row { grid-template-columns: 1fr; gap: 4px; }
+  }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script src="data.js"></script>
+<script>
+(function () {
+  var G = window.GAMES;
+  var app = document.getElementById('app');
+  var MULT = {1: '1x points', 2: 'Double (2x)', 3: 'Triple (3x)'};
+  var mode = 'operator';            // 'operator' | 'host'
+  var state = {};                   // per-round taps, kept in memory only
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function headH() { var h = document.querySelector('.top'); return h ? h.offsetHeight : 0; }
+  function key(g, r) { return g + '-' + r; }
+  function rs(g, r) { var k = key(g, r); if (!state[k]) state[k] = {done: {}, x: 0}; return state[k]; }
+
+  function home() {
+    document.body.style.removeProperty('--gc');
+    var cards = G.map(function (g) {
+      return '<a class="gcard" style="background:' + g.color + '" href="#/game/' + g.n + '">' +
+        '<div class="num">GAME ' + g.n + '</div><div class="ttl">' + esc(g.title) + '</div>' +
+        '<div class="meta">' + esc(g.cat) + ' · 6 rounds' + (g.fm.length ? ' + Fast Money' : '') + '</div><div class="go">Open ›</div></a>';
+    }).join('');
+    app.innerHTML = '<div class="hero"><h1>FAMILY FEUD NIGHT</h1><p>Host &amp; operator guide · pick a game</p></div>' +
+      '<div class="wrap"><div class="grid">' + cards + '</div>' +
+      '<a class="howlink" href="#/how"><span>How to run the board (operator controls)</span><span>›</span></a></div>';
+    window.scrollTo(0, 0);
+  }
+
+  function tileHTML(g, r, i, a) {
+    if (!a) return '<div class="tile blank">Tile ' + (i + 1) + ' not used</div>';
+    var done = rs(g.n, r).done[i] ? ' done' : '';
+    return '<button class="tile' + done + '" data-g="' + g.n + '" data-r="' + r + '" data-i="' + i + '">' +
+      '<span class="n">' + (i + 1) + '</span><span class="a">' + esc(a.t) + (a.sub ? '<small>' + esc(a.sub) + '</small>' : '') + '</span>' +
+      '<span class="p">' + a.p + '</span></button>';
+  }
+
+  function banked(g, r) {
+    var rd = g.rounds[r], s = rs(g.n, r), sum = 0;
+    rd.answers.forEach(function (a, i) { if (s.done[i]) sum += a.p; });
+    return sum;
+  }
+
+  function roundHTML(g, r) {
+    var rd = g.rounds[r], s = rs(g.n, r), tiles = '';
+    for (var i = 0; i < 8; i++) tiles += tileHTML(g, r, i, rd.answers[i]);
+    var xs = '';
+    for (var k = 1; k <= 3; k++) xs += '<button class="x' + (s.x >= k ? ' on' : '') + '" data-x="' + k + '" data-g="' + g.n + '" data-r="' + r + '" aria-label="Strike ' + k + '">X</button>';
+    var b = banked(g, r);
+    return '<section class="round" id="r' + (r + 1) + '">' +
+      '<div class="rhead"><span class="rnum">R' + (r + 1) + '</span><span class="rtitle">' + esc(rd.title) + '</span>' +
+      '<span class="badge b-slide">SLIDE ' + rd.slide + '</span><span class="badge b-' + rd.mult + '">' + MULT[rd.mult].toUpperCase() + '</span></div>' +
+      '<div class="rbody"><div class="label">HOST READS</div>' +
+      '<div class="q"><span class="lead">“We surveyed 100 people… </span>' + esc(rd.q) + '”</div>' +
+      '<div class="board">' + tiles + '</div>' +
+      '<div class="tools"><div class="strikes">' + xs + '</div>' +
+      '<span class="bank">Revealed: <b>' + b + '</b>' + (rd.mult > 1 ? ' × ' + rd.mult + ' = <b>' + (b * rd.mult) + '</b>' : '') + ' pts</span>' +
+      '<button class="reset" data-reset="1" data-g="' + g.n + '" data-r="' + r + '">Reset round</button></div>' +
+      (rd.note ? '<div class="note"><b>Host note:</b> ' + esc(rd.note) + '</div>' : '') +
+      (mode === 'operator' ? '<div class="opsteps">On the slide: <b>Show Question</b> → host reads → <b>Hide Question</b> → click the tile number when it\'s guessed → red X for each strike.</div>' : '') +
+      '</div></section>';
+  }
+
+  function rundownHTML(g) {
+    return g.rounds.map(function (rd, r) {
+      return '<div class="rd" id="r' + (r + 1) + '"><h3>Round ' + (r + 1) + ' · ' + esc(rd.title) + ' · ' + MULT[rd.mult] + '</h3>' +
+        '<div class="rq">“We surveyed 100 people… ' + esc(rd.q) + '”</div><ol>' +
+        rd.answers.map(function (a) { return '<li>' + esc(a.t) + ' <span>' + a.p + '</span></li>'; }).join('') +
+        '</ol>' + (rd.note ? '<div class="note"><b>Host note:</b> ' + esc(rd.note) + '</div>' : '') + '</div>';
+    }).join('');
+  }
+
+  function fmHTML(g) {
+    if (!g.fm.length) return '';
+    return '<section class="round" id="fm"><div class="rhead"><span class="rnum">FM</span><span class="rtitle">Fast Money</span>' +
+      '<span class="badge b-slide">SLIDES 10–11</span></div><div class="rbody">' +
+      '<div class="note">Same 10 questions for Player 1 (slide 10) and Player 2 (slide 11). Send Player 2 out of the room. Operator: click <b>1:00</b> to start the timer, click each question bar as it\'s read, green <b>+</b> if correct, red <b>x</b> if wrong. The host judges answers.</div>' +
+      '<ol class="fm">' + g.fm.map(function (q) { return '<li>' + esc(q) + '</li>'; }).join('') + '</ol></div></section>';
+  }
+
+  function game(n) {
+    var g = G.filter(function (x) { return x.n === n; })[0];
+    if (!g) return home();
+    document.body.style.setProperty('--gc', g.color);
+    var chips = g.rounds.map(function (rd, r) { return '<a class="chip" href="#r' + (r + 1) + '" data-jump="r' + (r + 1) + '">R' + (r + 1) + (rd.mult > 1 ? ' ×' + rd.mult : '') + '</a>'; }).join('') +
+      (g.fm.length && mode === 'operator' ? '<a class="chip" href="#fm" data-jump="fm">Fast Money</a>' : '');
+    var body = mode === 'host' ? rundownHTML(g) + (g.fm.length ? fmHTML(g) : '') : g.rounds.map(function (_, r) { return roundHTML(g, r); }).join('') + fmHTML(g);
+    app.innerHTML =
+      '<header class="top"><div class="top-in"><a class="back" href="#/">‹ Games</a>' +
+      '<h1>Game ' + g.n + ': ' + esc(g.title) + '<small>' + esc(g.cat) + (g.fm.length ? ' · 11 slides, Fast Money' : ' · 8 slides, no Fast Money') + '</small></h1></div>' +
+      '<nav class="chips">' + chips + '</nav></header>' +
+      '<div class="wrap"><div class="mode"><button data-mode="operator" class="' + (mode === 'operator' ? 'on' : '') + '">Operator · board</button>' +
+      '<button data-mode="host" class="' + (mode === 'host' ? 'on' : '') + '">Host · rundown</button></div>' +
+      '<p class="hint">' + (mode === 'operator' ? 'Tile number on screen = number here. Tap a tile after you click it on the slide to keep track.' : 'Every question in order with its answers. Rank = tile number.') + '</p>' +
+      body + '</div>';
+    window.scrollTo(0, 0);
+  }
+
+  function how() {
+    document.body.style.setProperty('--gc', '#14142b');
+    var rows = [
+      ['Green arrows', 'bottom left', 'Previous / next slide. Use these to change rounds.'],
+      ['SHOW QUESTION', 'bottom left', 'Question card appears and types out (2–3 seconds). Numbered tiles drop onto the board.'],
+      ['HIDE QUESTION', 'next to Show', 'Card fades away so the board is visible.'],
+      ['Tiles 1–8', 'the board', 'Click to flip. Left column is 1–4, right column 5–8. Tile number = answer rank.'],
+      ['Red X button', 'bottom right', 'One strike per click: 1st, 2nd, 3rd.'],
+      ['XXX', 'top right corner', 'Resets strikes to zero (before a steal or a new face-off).'],
+      ['Sound buttons', 'bottom right', 'Win, Lose, Cheer, Boo. Silence stops sound.']
+    ].map(function (x) { return '<div class="row"><div><b>' + x[0] + '</b><small>' + x[1] + '</small></div><div>' + x[2] + '</div></div>'; }).join('');
+    app.innerHTML = '<header class="top"><div class="top-in"><a class="back" href="#/">‹ Games</a><h1>How to run the board<small>Same controls on every round slide, all 4 games</small></h1></div></header>' +
+      '<div class="wrap"><div class="how">' + rows + '</div>' +
+      '<div class="warn">Never click empty space on the slide or press the spacebar. It skips to the next slide.</div>' +
+      '<ol class="steps"><li>Green arrow to the round slide. The board loads covered.</li><li>Host is ready: click <b>SHOW QUESTION</b>. Wait for the typing to finish.</li>' +
+      '<li>Click <b>HIDE QUESTION</b> after it\'s read.</li><li>Right answer: find it in this guide and click that tile number on the slide.</li>' +
+      '<li>Wrong answer: red X. After three strikes, the other team gets one steal.</li><li>Round over: click any covered tiles to show the rest, then the green arrow.</li></ol>' +
+      '<p class="hint">Tip: run PowerPoint in Presenter View. Each round\'s answer key is also in the speaker notes.</p></div>';
+    window.scrollTo(0, 0);
+  }
+
+  function route() {
+    var h = location.hash;
+    var m = h.match(/^#\/game\/(\d)/);
+    if (m) return game(+m[1]);
+    if (h === '#/how') return how();
+    if (h === '' || h === '#/' || h === '#') return home();
+  }
+
+  app.addEventListener('click', function (e) {
+    var t = e.target.closest('button, a');
+    if (!t) return;
+    if (t.dataset.jump) { e.preventDefault(); var el = document.getElementById(t.dataset.jump);
+      if (el) window.scrollTo({top: el.getBoundingClientRect().top + window.scrollY - headH() - 10, behavior: 'smooth'}); return; }
+    if (t.dataset.mode) { mode = t.dataset.mode; var m = location.hash.match(/^#\/game\/(\d)/); if (m) game(+m[1]); return; }
+    var g = +t.dataset.g, r = +t.dataset.r;
+    if (!g && g !== 0) return;
+    var s = rs(g, r), gm = G.filter(function (x) { return x.n === g; })[0];
+    if (t.dataset.i !== undefined) { var i = +t.dataset.i; s.done[i] = !s.done[i]; }
+    else if (t.dataset.x) { var k = +t.dataset.x; s.x = s.x === k ? k - 1 : k; }
+    else if (t.dataset.reset) { state[key(g, r)] = {done: {}, x: 0}; }
+    else return;
+    var sec = document.getElementById('r' + (r + 1));
+    var tmp = document.createElement('div'); tmp.innerHTML = roundHTML(gm, r);
+    sec.replaceWith(tmp.firstChild);
+  });
+
+  // highlight the round chip in view
+  window.addEventListener('scroll', function () {
+    var chips = document.querySelectorAll('.chip'); if (!chips.length) return;
+    var cur = null;
+    var lim = headH() + 40;
+    chips.forEach(function (c) { var el = document.getElementById(c.dataset.jump); if (el && el.getBoundingClientRect().top < lim) cur = c; });
+    chips.forEach(function (c) { c.classList.toggle('on', c === cur); });
+  }, {passive: true});
+
+  window.addEventListener('hashchange', route);
+  route();
+})();
+</script>
+</body>
+</html>
